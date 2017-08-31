@@ -19,11 +19,18 @@ class FashionSiteExportPipeline(object):
     The pipeline is used in order to use an item exporter called JsonLinesItemSplitFileExporter to organize scraped
     output files. Otherwise all output files are aggregated into one file using default feed exports.
 
+    Attributes:
+        exporter (JsonLinesItemSplitFileExporter): An exporter that can export items into json lines.
+
     """
+
+    def __init__(self):
+        """Set up exporter to export items into json lines."""
+        self.exporter = JsonLinesItemSplitFileExporter()
 
     @classmethod
     def from_crawler(cls, crawler):
-        """Creates a pipeline instance from a crawler.
+        """Create a pipeline instance from a crawler.
 
         If present, this classmethod is called to create a pipeline instance from a Crawler. It must return a new
         instance of the pipeline. Crawler object provides access to all Scrapy core components like settings and
@@ -42,7 +49,7 @@ class FashionSiteExportPipeline(object):
         return pipeline
 
     def spider_opened(self, spider):
-        """Sets up the JsonLinesItemSplitFileExporter exporter.
+        """Set up the JsonLinesItemSplitFileExporter exporter.
 
         This method is called when the spider is opened. We want to setup the exporter with our custom json lines item
         exporter.
@@ -52,7 +59,6 @@ class FashionSiteExportPipeline(object):
 
         """
         spider.logger.info(f"{self.__class__.__name__} spider_opened")
-        self.exporter = JsonLinesItemSplitFileExporter()
         self.exporter.start_exporting()
 
     def spider_closed(self, spider):
@@ -74,8 +80,9 @@ class FashionSiteExportPipeline(object):
         Args:
             item (list or str): A list or str depending on if there's a list of item or only one item (then it is only
                 a string).
+            spider (scrapy.spiders.Spider): A Scrapy spider instance.
 
         """
         spider.logger.info(f"{self.__class__.__name__} process_item {item}")
-        self.exporter.export_item(spider, item)
+        self.exporter.export_item(item)
         return item

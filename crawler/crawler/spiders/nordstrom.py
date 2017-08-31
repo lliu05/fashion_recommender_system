@@ -1,8 +1,10 @@
-import scrapy
-import logging
+"""Spider used to scrape nordstrom.com products/articles."""
+
 import os
-from urllib.parse import urlencode, urlunparse, urlparse, parse_qs
+import logging
 from logging.handlers import RotatingFileHandler
+from urllib.parse import urlencode, urlunparse, urlparse, parse_qs
+import scrapy
 from scrapy.loader import ItemLoader
 from ..items import NordstromItem
 
@@ -99,7 +101,7 @@ class NordstromSpider(scrapy.Spider):
                 # stop going to the next page
                 url_parts = list(urlparse(response.url))
                 query = dict(parse_qs(url_parts[4]))
-                next_page_num = response.meta["page"]+1
+                next_page_num = response.meta["page"] + 1
                 query.update({"top": 4, "page": next_page_num})
                 url_parts[4] = urlencode(query)
                 request = scrapy.Request(urlunparse(url_parts), callback=self.parse_article)
@@ -150,4 +152,7 @@ class NordstromSpider(scrapy.Spider):
         # image_urls and images are used for the download pipeline
         loader.add_css("image_urls", "li.image-thumbnail img::attr(src)")
         loader.add_value("images", None)
+
+        # Add the spider name so we can use it to organize our json lines files
+        loader.add_value("spider_name", self.name)
         yield loader.load_item()

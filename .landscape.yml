@@ -16,3 +16,11 @@ pylint:
       - too-many-instance-attributes
       - too-few-public-methods
       - invalid-name
+      - too-many-ancestors
+      - unnecessary-lambda
+pep257:
+    disable:
+      - D213
+      - D211
+      - D406
+      - D407

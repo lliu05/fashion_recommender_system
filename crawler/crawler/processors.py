@@ -1,4 +1,4 @@
-"""Processors that are used with Scrapy items.
+"""Processor that are used with Scrapy items.
 
 The processors are used to either process the input before or after new data is received for a Scrapy item.
 
@@ -18,7 +18,7 @@ class RemoveSaleHome(object):
     """
 
     def __call__(self, values):
-        """Function to remove Home or Sale keyword.
+        """Callable to remove Home or Sale keyword.
 
         Args:
             values (list): A list from a Scrapy's item with key 'article_type'.

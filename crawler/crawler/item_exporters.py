@@ -11,7 +11,6 @@ More Info:
 """
 
 import os
-
 from scrapy.utils.serialize import ScrapyJSONEncoder
 from scrapy.exporters import BaseItemExporter
 from scrapy.utils.python import to_bytes
@@ -39,11 +38,10 @@ class JsonLinesItemSplitFileExporter(BaseItemExporter):
         self.encoder = ScrapyJSONEncoder()
         super(JsonLinesItemSplitFileExporter, self).__init__()
 
-    def export_item(self, spider, item=None):
-        """Export Scrapy items to specific files based on the article_type
+    def export_item(self, item):
+        """Export Scrapy items to specific files based on the article_type.
 
         Args:
-            spider (scrapy.spider.Spiders): Scrapy spider that is used to crawl the item.
             item (scrapy.Item): A Scrapy item that contains a complete scraped information for an article/product.
 
         """
@@ -56,10 +54,11 @@ class JsonLinesItemSplitFileExporter(BaseItemExporter):
         # item into a path, such as scraped_data/spider.name/article_type[0]/article_type[1], then the item would be
         # a json line placed in scraped_data/spider.name/article_type[0]/article_type[1]/article_type[2].jl.
         if len(item['article_type']) == 1:
-            path = os.path.join("scraped_data", spider.name)
+            path = os.path.join("scraped_data", item["spider_name"])
             item_path = os.path.join(path, item['article_type'][0]) + ".jl"
         else:
-            path = os.path.join(os.path.join("scraped_data", spider.name), (os.path.join(*item['article_type'][:-1])))
+            path = os.path.join(os.path.join("scraped_data", item["spider_name"]),
+                                (os.path.join(*item['article_type'][:-1])))
             item_path = os.path.join(path, item['article_type'][-1]) + ".jl"
         if not os.path.exists(path):
             os.makedirs(path)

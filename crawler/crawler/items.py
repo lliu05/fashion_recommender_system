@@ -37,6 +37,7 @@ class NordstromItem(scrapy.Item):
         details_and_care_list (scrapy.Field): List of care and details information.
         image_urls (scrapy.Field): List of urls of the images.
         images (scrapy.Field): List of hashes for corresponding image_urls.
+        spider_name (scrapy.Field): Str of spider name.
 
     """
 
@@ -53,3 +54,4 @@ class NordstromItem(scrapy.Item):
     details_and_care_list = scrapy.Field()
     image_urls = scrapy.Field(output_processor=MapCompose(lambda x: url_query_cleaner(x)))
     images = scrapy.Field()
+    spider_name = scrapy.Field(output_processor=TakeFirst())
