@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+build
+project.egg-info
+legacy.zip
+setup.py
+logs
+images
+scraped_data
