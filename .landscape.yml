@@ -1,4 +1,3 @@
-doc-warnings: true
 test-warnings: true
 strictness: veryhigh
 autodetect: true
