@@ -1,4 +1,8 @@
-=strictness: veryhigh
+doc-warnings: true
+test-warnings: true
+strictness: veryhigh
+autodetect: true
+max-line-length: 120
 requirements:
     - requirements.txt
 python-targets:
