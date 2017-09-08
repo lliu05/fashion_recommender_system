@@ -1,5 +1,4 @@
-doc-warnings: yes
-strictness: veryhigh
+=strictness: veryhigh
 requirements:
     - requirements.txt
 python-targets:
