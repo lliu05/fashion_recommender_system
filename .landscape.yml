@@ -18,6 +18,7 @@ pylint:
       - too-many-ancestors
       - unnecessary-lambda
 pep257:
+    run: true
     disable:
       - D213
       - D211
