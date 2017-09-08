@@ -1,0 +1,26 @@
+doc-warnings: yes
+test-warnings: yes
+strictness: veryhigh
+autodetect: yes
+max-line-length: 120
+requirements:
+    - requirements.txt
+python-targets:
+    - 3
+pep8:
+    full: true
+pylint:
+    run: true
+    disable:
+      - too-many-return-statements
+      - too-many-instance-attributes
+      - too-few-public-methods
+      - invalid-name
+      - too-many-ancestors
+      - unnecessary-lambda
+pep257:
+    disable:
+      - D213
+      - D211
+      - D406
+      - D407
