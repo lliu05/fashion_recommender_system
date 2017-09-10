@@ -1,7 +1,6 @@
-doc-warnings: yes
-test-warnings: yes
+test-warnings: true
 strictness: veryhigh
-autodetect: yes
+autodetect: true
 max-line-length: 120
 requirements:
     - requirements.txt
@@ -19,6 +18,7 @@ pylint:
       - too-many-ancestors
       - unnecessary-lambda
 pep257:
+    run: true
     disable:
       - D213
       - D211
