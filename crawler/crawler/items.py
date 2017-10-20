@@ -55,3 +55,36 @@ class NordstromItem(scrapy.Item):
     image_urls = scrapy.Field(output_processor=MapCompose(lambda x: url_query_cleaner(x)))
     images = scrapy.Field()
     spider_name = scrapy.Field(output_processor=TakeFirst())
+
+
+class AsosItem(scrapy.Item):
+
+    """Scrapy item to store scraped data from asos.com.
+
+    Attributes:
+        article_type (scrapy.Field): List of the associated article type, for example: ['women', 'shoes'].
+        product_name (scrapy.Field): Str of the product name, for example: New Look Satin Twist Slider.
+        product_url (scrapy.Field): Str of the url of the product.
+        brand_name (scrapy.Field): Str of associated brand of the product, for example: New Look.
+        price (scrapy.Field): String of the price of the product.
+        fit (scrapy.Field): List of the different sizes for the product.
+        colors (scrapy.Field): List of colors for the product.
+        details_and_care_info (scrapy.Field): List of care information for the product.
+        details_and_care_list (scrapy.Field): List of care and details information.
+        image_urls (scrapy.Field): List of urls of the images.
+        images (scrapy.Field): List of hashes for corresponding image_urls.
+        spider_name (scrapy.Field): Str of spider name.
+    """
+
+    article_type = scrapy.Field(output_processor=RemoveSaleHome())
+    product_name = scrapy.Field(output_processor=TakeFirst())
+    product_url = scrapy.Field(output_processor=TakeFirst())
+    brand_name = scrapy.Field(output_processor=TakeFirst())
+    price = scrapy.Field(output_processor=TakeFirst())
+    fit = scrapy.Field()
+    colors = scrapy.Field(output_processor=TakeFirst())
+    details_and_care_info = scrapy.Field(output_processor=TakeFirst())
+    details_and_care_list = scrapy.Field(output_processor=TakeFirst())
+    image_urls = scrapy.Field(output_processor=MapCompose(lambda x: url_query_cleaner(x)))
+    images = scrapy.Field()
+    spider_name = scrapy.Field(output_processor=TakeFirst())
