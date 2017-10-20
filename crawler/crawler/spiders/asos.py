@@ -47,7 +47,7 @@ class AsosSpider(scrapy.Spider):
         # Collect all article types on asos homepage, such as women->shoes, which are placed in an li html tag,
         # inside li tags have an attribute href that allow us to move to the next page
         for article in response.css("div[class=sub-floor-menu] li a::attr(href)").extract():
-            request = scrapy.Request(article, callback=self.parse_article, meta={'item': item})
+            request = scrapy.Request(article, callback=self.parse_article)
             yield request
 
     def parse_article(self, response):
@@ -60,8 +60,7 @@ class AsosSpider(scrapy.Spider):
         # After reach in each article, start collecting all product links to each product under the articles
         # that have href tag, meaning it leads to a product link, such as women->shoes->New Look Satin Twist Slider.
         for product_url in response.css("a.product.product-link::attr(href)").extract():
-            request = scrapy.Request(product_url, callback=self.parse_item, meta={'item': item})
-            request.meta["product_url"] = product_url
+            request = scrapy.Request(product_url, callback=self.parse_item)
             yield request
 
     def parse_item(self, response):
