@@ -1,12 +1,11 @@
 """Spider used to scrape asos.com products/articles."""
 
-import scrapy
 import json
 import logging
+from logging.handlers import RotatingFileHandler
 import os
 import re
-from w3lib.url import url_query_cleaner
-from logging.handlers import RotatingFileHandler
+import scrapy
 from scrapy.loader import ItemLoader
 from ..items import AsosItem
 
@@ -70,9 +69,8 @@ class AsosSpider(scrapy.Spider):
             response (scrapy.http.Response): A scrapy response after a webpage is parsed.
 
         """
-
         # Prepare data for json loads, because price, color, and size need to be extracted from json
-        data = response.xpath('//script[contains(., "Pages/FullProduct")]/text()').re_first("view\('(\{.*\})',")
+        data = response.xpath('//script[contains(., "Pages/FullProduct")]/text()').re_first(r"view\('(\{.*\})',")
 
         # Avoid set products pages, which would give error when doing re.sub() afterwards
         if not data:
@@ -86,11 +84,15 @@ class AsosSpider(scrapy.Spider):
         data_json = json.loads(data_cleaned)
 
         # Create size_list as a list and color_set as a set to avoid repetition
-        size_list = []
+        sizes = set()
+        colors = set()
 
         # Iterate through variants to collect sizes and colors
         for variant in data_json['variants']:
-            size_list.append(variant['size'])
+            sizes.add(variant['size'])
+            colors.add(variant['colour'])
+        sizes = list(sizes)
+        colors = list(colors)
 
         # Create an item loader in order to add data into our Scrapy items.
         loader = ItemLoader(item=AsosItem(), response=response)
@@ -111,17 +113,17 @@ class AsosSpider(scrapy.Spider):
         loader.add_value("price", data_json['price']['current'])
 
         # Get the size of the product, this could be sizes like numbers
-        loader.add_value("fit", size_list)
+        loader.add_value("fit", sizes)
 
         # Get the color of the article
-        loader.add_value("colors", data_json['variants']['colour'])
+        loader.add_value("colors", colors)
 
         # Get the details and care information
         loader.add_css("details_and_care_info", "div.about-me span::text")
         loader.add_css("details_and_care_list", "div.care-info span::text")
 
         # image_urls and images are used for the download pipeline
-        loader.add_css("image_urls", "li aa img::attr(src)")
+        loader.add_css("image_urls", "li a img::attr(src)")
         loader.add_value("images", None)
 
         # Add the spider name so we can use it to organize our json lines files

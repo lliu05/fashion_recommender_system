@@ -74,6 +74,7 @@ class AsosItem(scrapy.Item):
         image_urls (scrapy.Field): List of urls of the images.
         images (scrapy.Field): List of hashes for corresponding image_urls.
         spider_name (scrapy.Field): Str of spider name.
+
     """
 
     article_type = scrapy.Field(output_processor=RemoveSaleHome())
